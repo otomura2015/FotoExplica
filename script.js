@@ -1,59 +1,158 @@
-let posts = JSON.parse(localStorage.getItem("posts")) || [];
+import { initializeApp } from 
+"https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 
-mostrar();
+import { 
+getFirestore,
+collection,
+addDoc,
+getDocs
+}
+from
+"https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-function postar(){
 
-    let titulo = document.getElementById("titulo").value;
-    let descricao = document.getElementById("descricao").value;
-    let arquivo = document.getElementById("imagem").files[0];
+import {
+getStorage,
+ref,
+uploadBytes,
+getDownloadURL
+}
+from
+"https://www.gstatic.com/firebasejs/10.12.2/firebase-storage.js";
 
-    if(!titulo || !descricao || !arquivo){
-        alert("Preencha tudo.");
-        return;
-    }
 
-    let leitor = new FileReader();
 
-    leitor.onload = function(){
+const firebaseConfig = {
 
-        posts.push({
-            titulo:titulo,
-            descricao:descricao,
-            imagem:leitor.result
-        });
+apiKey:"COLOQUE_AQUI",
 
-        localStorage.setItem("posts", JSON.stringify(posts));
+authDomain:"COLOQUE_AQUI",
 
-        mostrar();
+projectId:"COLOQUE_AQUI",
 
-        document.getElementById("titulo").value="";
-        document.getElementById("descricao").value="";
-        document.getElementById("imagem").value="";
-    }
+storageBucket:"COLOQUE_AQUI",
 
-    leitor.readAsDataURL(arquivo);
+messagingSenderId:"COLOQUE_AQUI",
+
+appId:"COLOQUE_AQUI"
+
+};
+
+
+
+const app = initializeApp(firebaseConfig);
+
+
+const db = getFirestore(app);
+
+const storage = getStorage(app);
+
+
+
+window.postar = async function(){
+
+
+let titulo =
+document.getElementById("titulo").value;
+
+
+let descricao =
+document.getElementById("descricao").value;
+
+
+let arquivo =
+document.getElementById("imagem").files[0];
+
+
+
+if(!arquivo){
+
+alert("Escolha uma imagem");
+
+return;
 
 }
 
-function mostrar(){
 
-    let div=document.getElementById("posts");
 
-    div.innerHTML="";
+let caminho =
+ref(storage,"imagens/"+arquivo.name);
 
-    posts.reverse().forEach(post=>{
 
-        div.innerHTML+=`
-        <div class="post">
-            <h2>${post.titulo}</h2>
-            <img src="${post.imagem}">
-            <p>${post.descricao}</p>
-        </div>
-        `;
 
-    });
+await uploadBytes(caminho,arquivo);
 
-    posts.reverse();
+
+
+let url =
+await getDownloadURL(caminho);
+
+
+
+await addDoc(collection(db,"posts"),{
+
+titulo:titulo,
+
+descricao:descricao,
+
+imagem:url
+
+});
+
+
+
+alert("Post criado!");
+
+mostrarPosts();
+
 
 }
+
+
+
+async function mostrarPosts(){
+
+
+let area =
+document.getElementById("posts");
+
+
+area.innerHTML="";
+
+
+
+let dados =
+await getDocs(collection(db,"posts"));
+
+
+
+dados.forEach((post)=>{
+
+
+let p = post.data();
+
+
+
+area.innerHTML += `
+
+<div class="post">
+
+<h2>${p.titulo}</h2>
+
+<img src="${p.imagem}">
+
+<p>${p.descricao}</p>
+
+</div>
+
+`;
+
+
+});
+
+
+}
+
+
+
+mostrarPosts();
