@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ImageWiki</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<h1>📷 ImageWiki</h1>
+
+<div class="formulario">
+    <input type="text" id="titulo" placeholder="Título">
+
+    <textarea id="descricao" placeholder="Explique o que é..."></textarea>
+
+    <input type="file" id="imagem" accept="image/*">
+
+    <button onclick="postar()">Postar</button>
+</div>
+
+<hr>
+
+<div id="posts"></div>
+
+<script src="script.js"></script>
+
+</body>
+</html>
