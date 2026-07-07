@@ -1,0 +1,51 @@
+body{
+    font-family:Arial;
+    background:#202124;
+    color:white;
+    margin:30px;
+}
+
+h1{
+    text-align:center;
+}
+
+.formulario{
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+    max-width:500px;
+    margin:auto;
+}
+
+input,textarea,button{
+    padding:10px;
+    border:none;
+    border-radius:10px;
+}
+
+textarea{
+    height:120px;
+}
+
+button{
+    background:#4285F4;
+    color:white;
+    cursor:pointer;
+}
+
+button:hover{
+    background:#2c6ad8;
+}
+
+.post{
+    background:#303134;
+    padding:15px;
+    margin:20px auto;
+    max-width:600px;
+    border-radius:15px;
+}
+
+.post img{
+    width:100%;
+    border-radius:10px;
+}
